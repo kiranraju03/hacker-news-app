@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - Build 1
 
+## Feb 18, 2020
+## Feature
+
+- Added integration for getting the postings on search text change & details of a posting.
+- Created models for postings and individual posting.
+- Added loading indicators for network call operations.
+
 ## Feb 17, 2020
 
 ## Fixed
