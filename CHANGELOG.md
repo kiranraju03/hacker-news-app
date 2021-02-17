@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Feb 17, 2020
 
+## Fixed
+
+- Moved folder contents one level up.
+
 ## Feature
 
 - Added splash, home and postings details screens and widgets needed.
