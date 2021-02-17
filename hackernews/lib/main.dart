@@ -1,6 +1,7 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hackernews/routes/router.dart';
 import 'package:hackernews/screens/splash_screen.dart';
 
 void main() {
@@ -17,11 +18,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Hacker News',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      defaultTransition: Transition.fadeIn,
+      getPages: Screens.screens,
       home: SplashScreen(),
     );
   }
