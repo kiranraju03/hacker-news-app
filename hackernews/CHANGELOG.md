@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Feb 17, 2020
 
+## Feature
+
+- Added splash, home and postings details screens and widgets needed.
+
+## Chore
+
+- Added Get package for state management
+- Added After layout mixin for splash screen animation
+- Added device preview for checking responsiveness
+
 ## Chore
 
 - Created initial setup for the hacker news project
