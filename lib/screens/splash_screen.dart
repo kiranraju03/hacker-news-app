@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hackernews/config/size_config.dart';
 import 'package:hackernews/routes/routes.dart' as routes;
+import 'package:hackernews/widgets/shared/loading_indicator.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -26,11 +27,18 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayoutMixin {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      body: Center(
-        child: Text(
-          'Hacker News',
-          style: title,
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Hacker News',
+            style: title,
+          ),
+          SizedBox(
+            height: 3 * SizeConfig.safeBlockVertical,
+          ),
+          LoadingIndicator()
+        ],
       ),
     );
   }
