@@ -18,12 +18,14 @@ class LoadingIndicator extends StatelessWidget {
         loadingText.isNotEmpty
             ? Text(
                 loadingText,
-                style: TextStyle(
-                  fontSize: 2 * SizeConfig.safeBlockHorizontal,
-                ),
+                style: loading,
               )
             : Container(),
       ],
     );
   }
 }
+
+TextStyle loading = TextStyle(
+  fontSize: 2 * SizeConfig.safeBlockHorizontal,
+);
