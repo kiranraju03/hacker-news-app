@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hackernews/config/constants.dart';
 import 'package:hackernews/config/size_config.dart';
-import 'package:hackernews/models/postings_model.dart';
+import 'package:hackernews/controllers/search_results_controller.dart';
+import 'package:hackernews/models/posting_model.dart';
+import 'package:hackernews/services/debounce.dart';
 import 'package:hackernews/services/postings_service.dart';
 import 'package:hackernews/widgets/postings/posting_card.dart';
-import 'package:hackernews/widgets/shared/progress_loading_indicator.dart';
-import '../config/size_config.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,36 +17,44 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController searchTextController = TextEditingController();
   PostingsService postingsService = PostingsService();
-  List<Postings> postings;
+  List<Posting> postings;
+  SearchResultsController searchResultsController =
+      Get.find<SearchResultsController>();
 
   @override
   void initState() {
-    postings = [];
+    searchTextController.text = searchResultsController.searchText;
+    postings = searchResultsController.postings;
     super.initState();
   }
 
   void onSearchTextChanged(String text) async {
+    final _debouncer = Debouncer(milliseconds: 1000);
     postings.clear();
     if (text.isEmpty) {
       setState(() {});
+      searchResultsController.init();
       return;
     }
-    try {
-      showLoading();
-      List<Postings> temp = await postingsService.getPostingsBySearch(
-        searchText: text,
-      );
-      setState(() {
-        postings = temp;
-      });
-      hideLoading();
-      SystemChannels.textInput.invokeMethod('TextInput.hide');
-    } catch (_) {
-      hideLoading();
-      Get.rawSnackbar(
-        message: ERROR_MESSAGE,
-      );
-    }
+    _debouncer.run(
+      () async {
+        try {
+          List<Posting> temp = await postingsService.getPostingsBySearch(
+            searchText: text,
+          );
+          setState(() {
+            postings = temp;
+          });
+          searchResultsController.postings = temp;
+          searchResultsController.searchText = searchTextController.text;
+          SystemChannels.textInput.invokeMethod('TextInput.hide');
+        } catch (_) {
+          Get.rawSnackbar(
+            message: ERROR_MESSAGE,
+          );
+        }
+      },
+    );
   }
 
   Widget getSearchBox() {
@@ -54,6 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 8,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(
+            10 * SizeConfig.safeBlockHorizontal,
+          ),
+        ),
         child: ListTile(
           visualDensity: const VisualDensity(
             horizontal: -4,
@@ -64,9 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             controller: searchTextController,
             decoration: InputDecoration(
               hintText: 'Search for an article',
-              hintStyle: TextStyle(
-                fontSize: 3.5 * SizeConfig.safeBlockHorizontal,
-              ),
+              hintStyle: hint,
               border: InputBorder.none,
             ),
             onChanged: onSearchTextChanged,
@@ -120,7 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-TextStyle title = TextStyle(
-  fontSize: 5 * SizeConfig.safeBlockHorizontal,
-  color: Colors.black,
+TextStyle hint = TextStyle(
+  fontSize: 3.5 * SizeConfig.safeBlockHorizontal,
 );

@@ -12,6 +12,7 @@ dependencies:
   after_layout: ^1.0.7+2 
   device_preview: ^0.5.5
   dio: ^3.0.10
+  flutter_html: ^1.2.0
   get: ^3.25.4
 
 dev_dependencies:

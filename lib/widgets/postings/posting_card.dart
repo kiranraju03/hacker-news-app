@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hackernews/config/constants.dart';
 import 'package:hackernews/config/size_config.dart';
+import 'package:hackernews/models/posting_detail_model.dart';
 import 'package:hackernews/models/posting_model.dart';
-import 'package:hackernews/models/postings_model.dart';
+import 'package:hackernews/screens/postings/posting_details_screen.dart';
 import 'package:hackernews/services/postings_service.dart';
 import 'package:hackernews/widgets/shared/progress_loading_indicator.dart';
 
-import '../../screens/postings/posting_details_screen.dart';
-
 class PostingCard extends StatelessWidget {
-  final Postings postings;
+  final Posting postings;
 
   const PostingCard({
     Key key,
@@ -21,13 +20,13 @@ class PostingCard extends StatelessWidget {
     try {
       showLoading();
       PostingsService postingsService = PostingsService();
-      Posting posting = await postingsService.getPosting(
+      PostingDetails posting = await postingsService.getPosting(
         postingId: int.parse(postings.objectID),
       );
       hideLoading();
       Get.to(
         () => PostingDetailsScreen(
-          posting: posting,
+          postingDetails: posting,
         ),
       );
     } catch (_) {
@@ -35,16 +34,6 @@ class PostingCard extends StatelessWidget {
       Get.rawSnackbar(
         message: ERROR_MESSAGE,
       );
-    }
-  }
-
-  String getTitle() {
-    if (postings.title == null) {
-      return 'Not Specified';
-    } else if (postings.title.isBlank) {
-      return 'Not Specified';
-    } else {
-      return postings.title;
     }
   }
 
@@ -72,7 +61,9 @@ class PostingCard extends StatelessWidget {
                 Container(
                   width: 50 * SizeConfig.safeBlockHorizontal,
                   child: Text(
-                    getTitle(),
+                    postings.title.isBlank || postings.title == null
+                        ? 'Not Specified'
+                        : postings.title,
                     softWrap: true,
                     maxLines: 2,
                   ),

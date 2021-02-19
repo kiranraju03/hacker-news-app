@@ -8,6 +8,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0] - Build 1
 
+## Feb 19, 2020
+
+## Feature
+
+- Added getx controller for managing the search results and searched text.
+- Added comments module, added models and design in posting details screen.
+- Posting details screen UI added.
+- Added html parser module to parse the comments text details.
+
+## Fixed
+
+- Added debounce for input entry for search.
+
+## Chore
+
+- Renamed model names to singluar from plural forms
+- Moved all text styles at the end of the file
+
 ## Feb 18, 2020
 ## Feature
 
